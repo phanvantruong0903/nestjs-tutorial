@@ -30,7 +30,7 @@ export class ExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       status = HttpStatus.BAD_REQUEST;
       if (exception.code === 'P2002') {
-        messages = [`${exception.meta?.target} đã tồn tại`];
+        messages = [`${exception.meta?.target} has already exists`];
       } else {
         messages = ['Dữ liệu không hợp lệ'];
       }
