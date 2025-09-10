@@ -1,25 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import { ExceptionsFilter } from './common/exceptions/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
     new ValidationPipe({
-      exceptionFactory: (errors) => {
-        const messages = errors
-          .map((err) => Object.values(err.constraints || {}))
-          .flat();
-
-        return new BadRequestException({
-          success: false,
-          message: 'Validation failed',
-          errors: messages,
-        });
-      },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
+
+  app.useGlobalFilters(new ExceptionsFilter());
 
   await app.listen(process.env.PORT ?? 3000);
 }

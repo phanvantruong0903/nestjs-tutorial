@@ -1,7 +1,7 @@
 import { BaseController } from 'src/common/abstract/base.controller';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UpdateUserDto } from './dto/UpdateUserDto';
-import { Controller } from '@nestjs/common';
+import { Body, Controller } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from './users.service';
 
@@ -12,6 +12,6 @@ export class UserController extends BaseController<
   UpdateUserDto
 > {
   constructor(private readonly userService: UserService) {
-    super(userService);
+    super(userService, CreateUserDto, UpdateUserDto);
   }
 }

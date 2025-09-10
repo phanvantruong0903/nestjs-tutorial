@@ -1,4 +1,4 @@
-export class BaseService<T, CreateDto, UpdateDto> {
+export abstract class BaseService<T, CreateDto, UpdateDto> {
   constructor(protected readonly model: any) {}
 
   create(dto: CreateDto): Promise<T> {
@@ -10,11 +10,11 @@ export class BaseService<T, CreateDto, UpdateDto> {
   }
 
   findOne(id: string): Promise<T | null> {
-    return this.model.findUnique({ where: { id: Number(id) } });
+    return this.model.findUnique({ where: { id } });
   }
 
   update(id: string, dto: UpdateDto): Promise<T> {
-    return this.model.update({ where: { id: Number(id) }, data: dto });
+    return this.model.update({ where: { id }, data: dto });
   }
 
   remove(): Promise<string> {
