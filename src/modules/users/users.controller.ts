@@ -1,4 +1,4 @@
-import { BaseController } from 'src/common/base/base.controller';
+import { BaseController } from 'src/common/abstract/base.controller';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { Body, Controller } from '@nestjs/common';

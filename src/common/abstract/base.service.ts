@@ -16,8 +16,4 @@ export abstract class BaseService<T, CreateDto, UpdateDto> {
   update(id: string, dto: UpdateDto): Promise<T> {
     return this.model.update({ where: { id }, data: dto });
   }
-
-  remove(): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
 }

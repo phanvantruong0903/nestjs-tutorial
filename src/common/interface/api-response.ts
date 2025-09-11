@@ -4,3 +4,9 @@ export interface ApiResponse<T = any> {
   data?: T;
   errors?: string[];
 }
+
+export interface ErrorResponse {
+  success: boolean;
+  message: string;
+  errors?: string[];
+}

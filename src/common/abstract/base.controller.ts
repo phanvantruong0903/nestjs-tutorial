@@ -10,8 +10,9 @@ import {
 import { BaseService } from './base.service';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
-import { ApiResponse } from './api-response';
+import { ApiResponse } from '../interface/api-response';
 import { USER_MESSAGES } from 'src/constants/messages';
+import { throwError } from '../utils/throw-error';
 
 export abstract class BaseController<
   T,
@@ -31,13 +32,11 @@ export abstract class BaseController<
       try {
         await validateOrReject(dtoInstance);
       } catch (errors) {
-        throw new BadRequestException({
-          success: false,
-          message: USER_MESSAGES.VALIDATION_ERROR,
-          errors: errors.map((err: any) =>
-            Object.values(err.constraints || {}).join(', '),
-          ),
-        });
+        const messages: string[] = (errors as any[]).map((err) =>
+          Object.values(err.constraints ?? {}).join(', '),
+        );
+
+        throwError(USER_MESSAGES.VALIDATION_ERROR, messages);
       }
     }
     const data = await this.service.create(createDto);
@@ -50,22 +49,38 @@ export abstract class BaseController<
 
   @Get()
   async findAll(): Promise<ApiResponse<T[]>> {
-    const data = await this.service.findAll();
-    return {
-      success: true,
-      message: USER_MESSAGES.GET_ALL_SUCCESS,
-      data,
-    };
+    try {
+      const data = await this.service.findAll();
+      return {
+        success: true,
+        message: USER_MESSAGES.GET_ALL_SUCCESS,
+        data,
+      };
+    } catch (errors) {
+      const messages: string[] = (errors as any[]).map((err) =>
+        Object.values(err.constraints ?? {}).join(', '),
+      );
+
+      throwError(USER_MESSAGES.VALIDATION_ERROR, messages);
+    }
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ApiResponse<T | null>> {
-    const data = await this.service.findOne(id);
-    return {
-      success: true,
-      message: USER_MESSAGES.GET_DETAIL_SUCCESS,
-      data,
-    };
+    try {
+      const data = await this.service.findOne(id);
+      return {
+        success: true,
+        message: USER_MESSAGES.GET_DETAIL_SUCCESS,
+        data,
+      };
+    } catch (errors) {
+      const messages: string[] = (errors as any[]).map((err) =>
+        Object.values(err.constraints ?? {}).join(', '),
+      );
+
+      throwError(USER_MESSAGES.VALIDATION_ERROR, messages);
+    }
   }
 
   @Put('/:id')
@@ -79,13 +94,11 @@ export abstract class BaseController<
       try {
         await validateOrReject(dtoInstance);
       } catch (errors) {
-        throw new BadRequestException({
-          success: false,
-          message: USER_MESSAGES.VALIDATION_ERROR,
-          errors: errors.map((err: any) =>
-            Object.values(err.constraints || {}).join(', '),
-          ),
-        });
+        const messages: string[] = (errors as any[]).map((err) =>
+          Object.values(err.constraints ?? {}).join(', '),
+        );
+
+        throwError(USER_MESSAGES.VALIDATION_ERROR, messages);
       }
     }
 
@@ -95,10 +108,5 @@ export abstract class BaseController<
       message: USER_MESSAGES.UPDATE_SUCCESS,
       data,
     };
-  }
-
-  @Delete(':id')
-  remove() {
-    return this.service.remove();
   }
 }

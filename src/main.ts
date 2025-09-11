@@ -1,10 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ExceptionsFilter } from './common/exceptions/exception.filter';
+import { GrpcExceptionFilter } from './common/filters/exception.filter';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'user',
+        protoPath: join(__dirname, '../proto/user.proto'),
+        url: '0.0.0.0:50051',
+      },
+    },
+  );
+
+  console.log('Proto path:', join(__dirname, '../proto/user.proto'));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,8 +28,8 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new ExceptionsFilter());
+  app.useGlobalFilters(new GrpcExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen();
 }
 bootstrap();
