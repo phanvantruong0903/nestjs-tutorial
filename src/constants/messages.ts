@@ -6,4 +6,5 @@ export const USER_MESSAGES = {
   DELETE_SUCCESS: 'User deleted successfully',
   NOT_FOUND: 'User not found',
   VALIDATION_ERROR: 'Validation error',
+  CREATE_FAILED: 'Create User failed',
 };

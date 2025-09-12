@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { UserService } from './users.service';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UpdateUserDto } from './dto/UpdateUserDto';
@@ -32,8 +32,12 @@ export class UsersGrpcController extends BaseController<
 
   @GrpcMethod('UserService', 'CreateUser')
   async createUser(data: CreateUserDto) {
-    const result = await this.baseHandler.createLogic(data);
-    return grpcResponse(result, USER_MESSAGES.CREATE_SCUCCESS);
+    try {
+      const result = await this.baseHandler.createLogic(data);
+      return grpcResponse(result, USER_MESSAGES.CREATE_SCUCCESS);
+    } catch (error) {
+      throw new RpcException(error.message || USER_MESSAGES.CREATE_FAILED);
+    }
   }
 
   @GrpcMethod('UserService', 'GetUser')

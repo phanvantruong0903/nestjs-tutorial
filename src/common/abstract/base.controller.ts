@@ -35,7 +35,6 @@ export abstract class BaseController<
         const messages: string[] = (errors as any[]).map((err) =>
           Object.values(err.constraints ?? {}).join(', '),
         );
-
         throwError(USER_MESSAGES.VALIDATION_ERROR, messages);
       }
     }
