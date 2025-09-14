@@ -5,7 +5,7 @@ import { UsersGrpcController } from './users.grpc.controller';
 
 @Module({
   imports: [],
-  controllers: [UserController, UsersGrpcController],
+  controllers: [UsersGrpcController],
   providers: [UserService],
 })
 export class UserModule {}

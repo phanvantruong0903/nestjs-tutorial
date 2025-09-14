@@ -8,6 +8,7 @@ import { grpcResponse } from 'src/common/utils/grpc-response';
 import { User } from '@prisma/client';
 import { BaseController } from 'src/common/abstract/base.controller';
 import { USER_MESSAGES } from 'src/constants/messages';
+import { LoginUserDto } from './dto/LoginUserDto';
 
 @Controller()
 export class UsersGrpcController extends BaseController<
@@ -49,6 +50,7 @@ export class UsersGrpcController extends BaseController<
   @GrpcMethod('UserService', 'UpdateUser')
   async updateUser(data: UpdateUserDto & { id: string }) {
     const { id, ...updateData } = data;
+    console.log(data);
     const result = await this.baseHandler.updateLogic(id, updateData);
     return grpcResponse(result, USER_MESSAGES.UPDATE_SUCCESS);
   }
@@ -58,5 +60,11 @@ export class UsersGrpcController extends BaseController<
     const result = await this.baseHandler.getAllLogic();
     console.log(result);
     return grpcResponse(result, USER_MESSAGES.GET_ALL_SUCCESS);
+  }
+
+  @GrpcMethod('UserService', 'LoginUser')
+  async login(data: LoginUserDto) {
+    const result = await this.userService.validateUser(data);
+    return grpcResponse(result, USER_MESSAGES.LOGIN_SUCCESS);
   }
 }

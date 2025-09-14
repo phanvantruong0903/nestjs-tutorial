@@ -13,7 +13,7 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @Min(1900)
-  @Max(new Date().getFullYear())
+  @Min(1900, { message: 'YOB must be greater than 1900' })
+  @Max(new Date().getFullYear(), { message: 'YOB must be less than now' })
   YOB: number;
 }

@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { GrpcExceptionFilter } from './common/filters/exception.filter';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { RpcException } from '@nestjs/microservices';
 import { join } from 'path';
 
 async function bootstrap() {

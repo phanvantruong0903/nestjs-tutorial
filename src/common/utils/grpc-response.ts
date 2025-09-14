@@ -3,7 +3,7 @@ import { ErrorResponse } from '../interface/api-response';
 
 export function throwGrpcError(message: string, errors?: string[]): never {
   const errorResponse: ErrorResponse = { success: false, message, errors };
-  throw new RpcException(errorResponse);
+  throw new RpcException(JSON.stringify(errorResponse));
 }
 
 export function grpcResponse<T>(data: T, message = 'Success') {

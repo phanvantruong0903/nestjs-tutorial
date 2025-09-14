@@ -21,23 +21,22 @@ export class GrpcExceptionFilter implements ExceptionFilter {
         errors: messages,
       };
 
-      console.error('Validation Error:', JSON.stringify(errorResponse, null, 2));
+      console.error(
+        'Validation Error:',
+        JSON.stringify(errorResponse, null, 2),
+      );
       return errorResponse;
     }
 
     // ===== Trường hợp RpcException =====
     if (exception instanceof RpcException) {
       const error = exception.getError();
-
       let response: any;
+
       try {
-        // Nếu error là string JSON thì parse
-        if (typeof error === 'string') {
-          response = JSON.parse(error);
-        } else {
-          response = error;
-        }
-      } catch (e) {
+        // Bắt buộc parse JSON
+        response = typeof error === 'string' ? JSON.parse(error) : error;
+      } catch {
         response = {
           success: false,
           message: 'Invalid RpcException format',
@@ -45,7 +44,6 @@ export class GrpcExceptionFilter implements ExceptionFilter {
         };
       }
 
-      console.error('RpcException:', JSON.stringify(response, null, 2));
       return response;
     }
 
