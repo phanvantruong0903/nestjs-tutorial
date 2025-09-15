@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { ErrorResponse } from '../interface/api-response';
+import { SERVER_MESSAGE } from 'src/constants/messages';
 
 @Catch()
 export class GrpcExceptionFilter implements ExceptionFilter {
@@ -17,7 +18,7 @@ export class GrpcExceptionFilter implements ExceptionFilter {
 
       const errorResponse: ErrorResponse = {
         success: false,
-        message: 'Validation failed',
+        message: SERVER_MESSAGE.VALIDATION_FAILED,
         errors: messages,
       };
 
@@ -39,7 +40,7 @@ export class GrpcExceptionFilter implements ExceptionFilter {
       } catch {
         response = {
           success: false,
-          message: 'Invalid RpcException format',
+          message: SERVER_MESSAGE.RCP_EXCEPTION,
           errors: [String(error)],
         };
       }
@@ -50,8 +51,8 @@ export class GrpcExceptionFilter implements ExceptionFilter {
     // ===== Các lỗi khác (Internal) =====
     const fallback = {
       success: false,
-      message: 'Internal server error',
-      errors: [exception.message || 'Unexpected error'],
+      message: SERVER_MESSAGE.INTERNAL_SERVER,
+      errors: [exception.message || SERVER_MESSAGE.UNEXPECTED_ERROR],
     };
 
     console.error('Unknown Error:', JSON.stringify(fallback, null, 2));

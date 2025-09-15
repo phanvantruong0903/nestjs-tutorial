@@ -2,7 +2,6 @@ import { validateOrReject } from 'class-validator';
 import { throwGrpcError } from '../utils/grpc-response';
 import { BaseService } from './base.service';
 import { plainToInstance } from 'class-transformer';
-import { error } from 'console';
 import { SERVER_MESSAGE, USER_MESSAGES } from 'src/constants/messages';
 
 export class BaseGrpcHandler<

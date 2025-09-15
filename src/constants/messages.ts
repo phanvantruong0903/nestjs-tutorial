@@ -19,5 +19,6 @@ export const SERVER_MESSAGE = {
   FOREIGN_KEY_FAILED: 'Foreign key constraint failed',
   FOREIGN_KEY_INVALID: (field: string) => `Field ${field} invalid`,
   UNIQUE_CONSTRAINT_FAILED: 'Unique constraint failed',
-  UNEXPECTED_ERROR: 'Unexpected error',
+  UNEXPECTED_ERROR: 'Unexpected Error',
+  RCP_EXCEPTION: 'Rcp Exception',
 };
