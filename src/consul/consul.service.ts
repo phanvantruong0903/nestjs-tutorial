@@ -4,7 +4,7 @@ import Consul from 'consul';
 @Injectable()
 export class ConsulService implements OnModuleInit, OnModuleDestroy {
   private consul: any;
-  private readonly serviceId = 'user-service-1';
+  private readonly serviceId = 'user-service';
 
   onModuleInit() {
     this.consul = new Consul({
@@ -24,12 +24,11 @@ export class ConsulService implements OnModuleInit, OnModuleDestroy {
         address: 'host.docker.internal',
         port: 50051,
         check: {
-          http: 'http://localhost:3000/health',
+          grpc: 'host.docker.internal:50051',
+          grpc_use_tls: false,
           interval: '10s',
         },
       });
-
-      console.log('✅ User service registered to Consul');
     } catch (err) {
       console.error('❌ Failed to register service with Consul:', err);
     }
@@ -38,9 +37,9 @@ export class ConsulService implements OnModuleInit, OnModuleDestroy {
   onModuleDestroy() {
     this.consul.agent.service.deregister(this.serviceId, (err) => {
       if (err) {
-        console.error('❌ Deregister failed:', err);
+        console.error('Deregister failed:', err);
       } else {
-        console.log('🛑 User service deregistered from Consul');
+        console.log('User service deregistered from Consul');
       }
     });
   }

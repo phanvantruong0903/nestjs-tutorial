@@ -1,10 +1,10 @@
-// src/health/health.controller.ts
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 
-@Controller('health')
+@Controller()
 export class HealthController {
-  @Get()
-  getHealth() {
-    return { status: 'ok', service: 'UserService' };
+  @GrpcMethod('Health', 'Check')
+  check() {
+    return { status: 'SERVING' };
   }
 }
